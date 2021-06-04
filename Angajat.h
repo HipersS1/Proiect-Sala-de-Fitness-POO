@@ -8,7 +8,6 @@
 #define orar1 "08:00-15:00"
 #define orar2 "15:00-22:00"
 
-
 class Angajat : private Persoana
 {
 private:
@@ -33,8 +32,9 @@ public:
 	string getProgramMunca() { return programMunca; }
 	void setCod(int Cod) { cod = Cod; }
 
-	static void AfisareListaAngajati(list<Angajat> listaAngajati);
+	static void AfisareListaAngajati(list<Angajat> listaAngajati, int tip = 1);// 1 - convert 1, 2 - convert 2
 	string ConvertToString();
+	string ConvertToString2();
 	string ConversieSirFisier();
 	static Angajat AdaugaAngajat();
 	static int RandomCod(list<Angajat> listaPersoane);
@@ -43,13 +43,6 @@ public:
 	static void AfisareStatisticaAngajati(list<Angajat> listaAngajati);
 
 	bool operator == (const Angajat& a) const
-	{ 
-		bool numeE = false , prenumeE = false;
-		if (nume == a.nume)
-			numeE = true;
-		if (prenume == a.prenume)
-			prenumeE = true;
-		
-		return numeE && prenumeE && functie == a.functie && programMunca == a.programMunca; }
+	{ return cod == a.cod && nume == a.nume && prenume == a.prenume && functie == a.functie && programMunca == a.programMunca; }
 };
 

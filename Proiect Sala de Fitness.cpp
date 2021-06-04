@@ -1,4 +1,4 @@
-#include "Header.h"
+﻿#include "Header.h"
 
 
 int main()
@@ -16,15 +16,26 @@ int main()
         case '2':
             MenuAngajatiInterfata();
             break;
-        //case '3':
-        //    //MenuEquipment();
-        //    break;
+        case '3':
+            MenuEchipamenteInterfata();
+            break;
+        case 'I':
+            FORMATROW
+            cout << FORMAT4 "\033[0;32mProiect realizat de" << endl;
+            cout << FORMAT4 "Bruma Sebastian" << endl;
+            cout << FORMAT4 "Calculatoare An II" << endl;
+            cout << FORMAT4 "Grupa 3123 B\033[0m" << endl;
+            
+            _getch();
+            break;
         case 'X':
             std::cout << ("Programul se inchide\n");
             return 0;
         default:
-            std::cout << (FORMAT1"\t\b\b\033[0;31mOptiune invalida\033[0m");
-            Sleep(1500);
+			INVALID;
+			Sleep(1500);
+			continue;
         }
+        
     }
 }

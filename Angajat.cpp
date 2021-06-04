@@ -6,14 +6,14 @@ Angajat Angajat::AdaugaAngajat()
 	string nume, prenume, input;
 	do
 	{
-		cout << FORMAT1"Introduceti numele: ";
+		cout << FORMAT2"Introduceti numele: ";
 		cin >> nume;
 	} while (!ValidareString(nume));
 	cin.seekg(0, ios::end);//in caz ca sunt introduse 2 cuvinte
 	cin.clear();
 	do
 	{
-		cout << FORMAT1"Introduceti prenumele: ";
+		cout << FORMAT2"Introduceti prenumele: ";
 		cin >> prenume;
 	} while (!ValidareString(prenume));
 	cin.seekg(0, ios::end);
@@ -21,13 +21,14 @@ Angajat Angajat::AdaugaAngajat()
 	for (auto& c : nume) c = toupper(c);
 	for (auto& c : prenume) c = toupper(c);
 	Angajat angajatNou(nume, prenume);
-	cout << "Alegeti functia angajatului\n"
-		<< "1 - " << functie1 << endl
-		<< "2 - " << functie2 << endl
-		<< "3 - " << functie3 << endl
-		<< "4 - " << functie4 << endl
-		<< "5 - " << functie5 << endl;
+	cout << FORMAT2"Alegeti functia angajatului\n"
+		<< FORMAT2"1 - " << functie1 << endl
+		<< FORMAT2"2 - " << functie2 << endl
+		<< FORMAT2"3 - " << functie3 << endl
+		<< FORMAT2"4 - " << functie4 << endl
+		<< FORMAT2"5 - " << functie5 << endl;
 	bool tipAles = false;
+	do
 	{
 		switch (toupper(_getch()))
 		{
@@ -52,15 +53,18 @@ Angajat Angajat::AdaugaAngajat()
 			tipAles = true;
 			break;
 		default:
-			cout << "Optiune invalida\n";
-			break;
+			INVALID;
+			cout << endl;
+			Sleep(1500);
+			continue;
 		}
 	}while (tipAles == false);
-
-	cout << "Alegeti programul de munca\n"
-		<< "1 - " << orar1 << endl
-		<< "2 - " << orar2 << endl;
+	cout << endl << FORMAT2"Functia aleasa: \033[0;32m" << angajatNou.functie << "\033[0m" << endl << endl;
+	cout << FORMAT2"Alegeti programul de munca\n"
+		<< FORMAT2"1 - " << orar1 << endl
+		<< FORMAT2"2 - " << orar2 << endl;
 	tipAles = false;
+	do
 	{
 		switch (toupper(_getch()))
 		{
@@ -73,39 +77,16 @@ Angajat Angajat::AdaugaAngajat()
 			tipAles = true;
 			break;
 		default:
-			cout << "Optiune invalida\n";
-			break;
+			INVALID;
+			cout << endl;
+			Sleep(1500);
+			continue;
 		}
 	}while (tipAles == false);
+	cout << endl << FORMAT2"Orarul ales: \033[0;32m" << angajatNou.programMunca << "\033[0m" << endl;
+	cout << endl << FORMAT2"\033[0;32mAngajatul a fost inregistrat\033[0m" << endl;
 
 	return angajatNou;
-}
-
-int Angajat::RandomCod(list<Angajat> listaPersoane)
-{
-	int randCod;
-	srand(time(0));
-	if (listaPersoane.empty())
-	{
-		randCod = rand() % 100 + 1;
-		return randCod;
-	}
-	bool codNouGasit = false;
-	do
-	{
-		codNouGasit = true;
-		randCod = rand() % 100 + 1;
-		for (list<Angajat>::iterator it = listaPersoane.begin(); it != listaPersoane.end(); it++)
-		{
-			if (randCod == it->cod)
-			{
-				codNouGasit = false;
-				break;
-			}
-		}
-	} while (codNouGasit == false);
-
-	return randCod;
 }
 
 void Angajat::ModificaProgramAngajat(list<Angajat>& listaAngajati)
@@ -113,12 +94,12 @@ void Angajat::ModificaProgramAngajat(list<Angajat>& listaAngajati)
 	if (listaAngajati.empty())
 		return;
 	string codIntrodus;
-	AfisareListaAngajati(listaAngajati);
-	cout << "Introduceti codul: ";
+	AfisareListaAngajati(listaAngajati, 2);
+	cout << endl <<FORMAT3"    Introduceti codul: ";
 	cin >> codIntrodus;
 	if (ValidareNumar(codIntrodus) == false)
 	{
-		cout << "Codul a fost introdus incorect." << endl;
+		cout << FORMAT3"    \033[1;31mCodul a fost introdus incorect\033[0m" << endl;
 		return;
 	}
 	int codSelectat = stoi(codIntrodus);
@@ -127,32 +108,17 @@ void Angajat::ModificaProgramAngajat(list<Angajat>& listaAngajati)
 	{
 		if (codSelectat == it->cod)
 		{
-			cout << "Modificati programul de munca" << endl;
-			cout << "Alegeti programul de munca\n"
-				<< "1 - " << orar1 << endl
-				<< "2 - " << orar2 << endl;
-			bool tipAles = false;
-			{
-				switch (toupper(_getch()))
-				{
-				case '1':
-					it->programMunca = orar1;
-					tipAles = true;
-					break;
-				case '2':
-					it->programMunca = orar2;
-					tipAles = true;
-					break;
-				default:
-					cout << "Optiune invalida\n";
-					break;
-				}
-			}while (tipAles == false);
+			if (it->programMunca == orar1)
+				it->programMunca = orar2;
+			else
+				it->programMunca = orar1;
+			cout << FORMAT3"    \033[1;32mProgramul angajatului cu codul " << it->cod << " a fost actualizat in "<< it->programMunca <<"\033[0m" << endl;
+			 //\033[1; 32mAbonatul a fost inregistrat cu succes.\033[
 			AdministrareFisiere::RescrieFisierAngajati(listaAngajati);
 			return;
 		}		
 	}
-	cout << "Angajtul cu codul " + to_string(codSelectat) + " nu exista." << endl;
+	cout << FORMAT3"    \033[1;31mAngajatul cu codul " + to_string(codSelectat) + " nu exista\033[0m" << endl;
 }
 
 void Angajat::EliminaAngajat(list<Angajat>& listaAngajati)
@@ -209,44 +175,88 @@ void Angajat::AfisareStatisticaAngajati(list<Angajat> listaAngajati)
 		if (it->programMunca == orar2)
 			program2++;
 	}
-	cout << "Statistica angajati" << endl;
+	FORMATROW
 	ostringstream table;
-	table << setw(20) << left << functie1 << setw(10) << left << totalFunctie1 << endl
-		<< setw(20) << left << functie2 << setw(20) << left << totalFunctie2 << endl
-		<< setw(20) << left << functie3 << setw(20) << left << totalFunctie3 << endl
-		<< setw(20) << left << functie4 << setw(20) << left << totalFunctie4 << endl
-		<< setw(20) << left << functie5 << setw(11) << left << totalFunctie5 << endl
-		<< setw(20) << left << orar1 << setw(11) << left << program1 << endl
-		<< setw(20) << left << orar2 << setw(11) << left << program2 << endl;
+	table << FORMAT2 "|" underline << setw(28) << left << "Statistica angajati" << "|\n"
+		<< FORMAT2 "|" underline << setw(23) << left << functie1 << setw(5) << left << totalFunctie1 << "|\n"
+		<< FORMAT2 "|" underline << setw(23) << left << functie2 << setw(5) << left << totalFunctie2 << "|\n"
+		<< FORMAT2 "|" underline << setw(23) << left << functie3 << setw(5) << left << totalFunctie3 << "|\n"
+		<< FORMAT2 "|" underline << setw(23) << left << functie4 << setw(5) << left << totalFunctie4 << "|\n"
+		<< FORMAT2 "|" underline << setw(23) << left << functie5 << setw(5) << left << totalFunctie5 << "|\n\n\n"
+		<< FORMAT2 "|" underline << setw(28) << left << "Program angajati" << "|\n"
+		<< FORMAT2 "|" underline << setw(23) << left << orar1 << setw(5) << left << program1 << "|\n"
+		<< FORMAT2 "|" underline << setw(23) << left << orar2 << setw(5) << left << program2 << "\033[0m|\n";
 	cout << table.str();
 }
 
-void Angajat::AfisareListaAngajati(list<Angajat> listaAngajati)
+void Angajat::AfisareListaAngajati(list<Angajat> listaAngajati, int tip)
 {
 	if (listaAngajati.empty())
 	{
 		cout << "- GOL - ";
 		return;
 	}
-
+	FORMATROW;
+	if (tip == 1)
+	{
+		cout << FORMAT1"|" underline << setw(5) << left << "COD" << setw(15) << left << "NUME" << setw(15) << left << "PRENUME" << setw(19) << left << "FUNCTIE" << "\033[0m|\n";
+		for (list<Angajat>::iterator it = listaAngajati.begin(); it != listaAngajati.end(); ++it)
+		{
+			cout << it->ConvertToString() << "\n";
+		}
+		return;
+	}
+	cout << FORMAT1"|" underline << setw(5) << left << "COD" << setw(15) << left << "NUME" << setw(15) << left << "PRENUME" << setw(19) << left << "FUNCTIE" << setw(12) << left << "ORAR" << "\033[0m|\n";
 	for (list<Angajat>::iterator it = listaAngajati.begin(); it != listaAngajati.end(); ++it)
 	{
-		cout << it->ConvertToString() << "\n";
+		cout << it->ConvertToString2() << "\n";
 	}
 }
 
 string Angajat::ConvertToString()
 {
 	std::ostringstream table;
-	table << setw(3) << left << "ID:" << setw(10) << left << cod
-		<< setw(5) << left << "Nume:" << setw(20) << left << nume
-		<< setw(8) << left << "Prenume:" << setw(20) << left << prenume
-		<< setw(8) << left << "Functie:" << setw(20) << left << functie
-		<< setw(8) << left << "Program:" << setw(11) << left << programMunca;
+	table << FORMAT1 "|" underline<< setw(5) << left << cod << setw(15) << left << nume << setw(15) << left << prenume << setw(19) << left << functie  << "\033[0m|";
+
+	return table.str();
+}
+
+string Angajat::ConvertToString2()
+{
+	std::ostringstream table;
+	table << FORMAT1 "|" underline << setw(5) << left << cod << setw(15) << left << nume << setw(15) << left << prenume << setw(19) << left << functie << setw(12) << left << programMunca <<"\033[0m|";
+
 	return table.str();
 }
 
 string Angajat::ConversieSirFisier()
 {
 	return to_string(cod) + " " + nume + " " + prenume + " " + functie + " " + programMunca;
+}
+
+int Angajat::RandomCod(list<Angajat> listaPersoane)
+{
+	int randCod;
+	srand(time(0));
+	if (listaPersoane.empty())
+	{
+		randCod = rand() % 100 + 1;
+		return randCod;
+	}
+	bool codNouGasit = false;
+	do
+	{
+		codNouGasit = true;
+		randCod = rand() % 100 + 1;
+		for (list<Angajat>::iterator it = listaPersoane.begin(); it != listaPersoane.end(); it++)
+		{
+			if (randCod == it->cod)
+			{
+				codNouGasit = false;
+				break;
+			}
+		}
+	} while (codNouGasit == false);
+
+	return randCod;
 }

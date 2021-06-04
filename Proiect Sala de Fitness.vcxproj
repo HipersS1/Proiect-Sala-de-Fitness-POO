@@ -143,6 +143,7 @@
     <ClCompile Include="AdministrareFisiere.cpp" />
     <ClCompile Include="Angajat.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Echipament.cpp" />
     <ClCompile Include="Meniuri.cpp" />
     <ClCompile Include="Persoana.cpp" />
     <ClCompile Include="Proiect Sala de Fitness.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="AdministrareFisiere.h" />
     <ClInclude Include="Angajat.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="Echipament.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Persoana.h" />
   </ItemGroup>

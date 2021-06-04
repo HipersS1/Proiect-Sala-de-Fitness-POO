@@ -1,45 +1,65 @@
 #include "Header.h"
 #include "Client.h"
 #include "Angajat.h"
+#include "Echipament.h"
 #include "AdministrareFisiere.h"
 using namespace std;
 
 void Menu()
 {
     system("cls");
-    std::cout << (FORMAT1"|------Meniu Principal-----|\n"
-        FORMAT1"|1-Administrare abonamente |\n"
-        FORMAT1"|2-Administrare angajati   |\n"
-        //FORMAT1"|3-Administrare echipamente|\n"
-        FORMAT1"|X-Exit                    |\n"
-        FORMAT1"|--------------------------|\n");
+    std::cout << 
+        (FORMAT2"|-------Meniu Principal-------|\n"
+        FORMAT2"|1 - Administrare clienti     |\n"
+        FORMAT2"|2 - Administrare angajati    |\n"
+        FORMAT2"|3 - Administrare echipament  |\n"
+        FORMAT2"|I - INFO                     |\n"
+        FORMAT2"|X - Exit                     |\n"
+        FORMAT2"|_____________________________|\n");
 }
 
 void MenuAbonati()
 {
     system("cls");
-    std::cout << (FORMAT1"|------Meniu Abonati-------|\n"
-        FORMAT1"|1-Afisare abonati         |\n"
-        FORMAT1"|2-Adaugare abonat         |\n"
-        //FORMAT1"|3-Activare abonament      |\n"
-        FORMAT1"|4-Statistica abonati      |\n"
-        FORMAT1"|R-Meniu principal         |\n"
-        FORMAT1"|X-Exit                    |\n"
-        FORMAT1"|--------------------------|\n");
+    std::cout << 
+        (FORMAT2"|--------Meniu Abonati--------|\n"
+        FORMAT2"|1 - Afisare abonati          |\n"
+        FORMAT2"|2 - Adaugare abonat          |\n"
+        FORMAT2"|3 - Activare abonament       |\n"
+        FORMAT2"|4 - Statistica abonamente    |\n"
+        FORMAT2"|R - Meniu principal          |\n"
+        FORMAT2"|X - Exit                     |\n"
+        FORMAT2"|_____________________________|\n");
 }
 
 void MenuAngajati()
 {
     system("cls");
-    std::cout << (FORMAT1"|------Meniu Angajati------|\n"
-        FORMAT1"|1-Afisare angajati        |\n"
-        FORMAT1"|2-Adaugare anagajat       |\n"
-        FORMAT1"|3-Modifica program angajat|\n"
-        FORMAT1"|4-Eliminare angajat       |\n"
-        FORMAT1"|5-Statistica angajati     |\n"
-        FORMAT1"|R-Meniu principal         |\n"
-        FORMAT1"|X-Exit                    |\n"
-        FORMAT1"|--------------------------|\n");
+    std::cout << 
+        (FORMAT2"|------Meniu Angajati--------|\n"
+        FORMAT2"|1 - Afisare angajati        |\n"
+        FORMAT2"|2 - Adauga anagajat         |\n"
+        FORMAT2"|3 - Modifica program angajat|\n"
+        FORMAT2"|4 - Eliminare angajat       |\n"
+        FORMAT2"|5 - Statistica angajati     |\n"
+        FORMAT2"|R - Meniu principal         |\n"
+        FORMAT2"|X - Exit                    |\n"
+        FORMAT2"|____________________________|\n");
+}
+
+void MenuEchipamente()
+{
+	system("cls");
+	std::cout << 
+        (FORMAT2"|------Meniu Echipament------|\n"
+		FORMAT2"|1 - Afisare echipamente     |\n"
+		FORMAT2"|2 - Adauga echipament       |\n"
+		FORMAT2"|3 - Revizie echipamente     |\n"
+		FORMAT2"|4 - Eliminare echipament    |\n"
+		FORMAT2"|5 - Statistica echipamente  |\n"
+		FORMAT2"|R - Meniu principal         |\n"
+		FORMAT2"|X - Exit                    |\n"
+        FORMAT2"|____________________________|\n");
 }
 
 void MenuAbonatiInterfata()
@@ -62,7 +82,7 @@ void MenuAbonatiInterfata()
             AdministrareFisiere::AdaugaClientFisier(nou);
             break;
         case '3':
-
+            Client::ActivareAbonament(listaClienti);
             break;
         case '4':
             Client::StatisticaAbonamente(listaClienti);
@@ -72,10 +92,11 @@ void MenuAbonatiInterfata()
         case 'X':
             exit(0);
         default:
-            cout << (FORMAT1"\t\b\b\033[0;31mOptiune invalida\033[0m");
-            Sleep(1500);
+			INVALID;
+			Sleep(1500);
+			continue;
         }
-        cout << "\nApasati orice tasta pentru a continua" << endl;
+        NEXT;
         option = _getch();
     }
 }
@@ -85,6 +106,9 @@ void MenuAngajatiInterfata()
     char option;
     list<Angajat> listaAngajati = AdministrareFisiere::CitesteFisierAngajati();
     Angajat nou;
+	time_t now = time(0);
+	tm* gmtm = gmtime(&now);
+    char* dt = asctime(gmtm);
     while (1)
     {
         MenuAngajati();
@@ -94,6 +118,11 @@ void MenuAngajatiInterfata()
             Angajat::AfisareListaAngajati(listaAngajati);
             break;
         case '2':
+            if (listaAngajati.size() > numarMaximAngajati)
+            {
+                cout << FORMAT3 "S-a atins numarul maxim de angajati" << endl;
+				continue;
+            }
 			nou = Angajat::AdaugaAngajat();
 			nou.setCod(Angajat::RandomCod(listaAngajati));
 			listaAngajati.push_back(nou);
@@ -113,12 +142,72 @@ void MenuAngajatiInterfata()
         case 'X':
             exit(0);
         default:
-            std::cout << (FORMAT1"\t\b\b\033[0;31mOptiune invalida\033[0m");
+            INVALID;
             Sleep(1500);
+            continue;
         }
-		cout << "\nApasati orice tasta pentru a continua" << endl;
+        NEXT;
 		option = _getch();
     }
+}
+
+void MenuEchipamenteInterfata()
+{
+	char option;
+    list<Echipament> listaEchipamente = AdministrareFisiere::CitesteFisierEchipament();
+    Echipament echipamentNou;
+    string input;
+    int nrEchipamente = 0;
+	while (true)
+	{
+		MenuEchipamente();
+		switch (toupper(option = _getch()))
+		{
+		case '1':
+            Echipament::AfisareListaEchipamente(listaEchipamente, 2);
+			break;
+		case '2':
+            do 
+            {
+				cout << FORMAT3 "Introduceti numarul (1-10) de echipamente: ";
+                cin >> input;
+                if (ValidareNumar(input) == false)
+                    continue;
+                nrEchipamente = stoi(input);
+            } while (nrEchipamente <= 0 || nrEchipamente > 10);
+            
+			echipamentNou = Echipament::AdaugaEchipament();
+            for (int i = 0; i < nrEchipamente; i++)
+            {
+				echipamentNou.setCod(Echipament::RandomCod(listaEchipamente));
+				AdministrareFisiere::AdaugaEchipamentFisier(echipamentNou);
+				listaEchipamente.push_back(echipamentNou);
+            }
+			break;
+        case '3':
+            listaEchipamente.erase(listaEchipamente.begin(), listaEchipamente.end());
+            listaEchipamente = AdministrareFisiere::CitesteFisierEchipament();
+            Echipament::ActualizareRevizie(listaEchipamente);
+			listaEchipamente = AdministrareFisiere::CitesteFisierEchipament();
+			break;
+		case '4':
+            Echipament::StergeEchipament(listaEchipamente);
+			break;
+        case '5':
+            Echipament::StatisticaEchipamente(listaEchipamente);
+            break;
+		case 'R':
+			return;
+		case 'X':
+			exit(0);
+		default:
+			INVALID;
+			Sleep(1500);
+			continue;
+		}
+		NEXT;
+		option = _getch();
+	}
 }
 
 
