@@ -73,6 +73,7 @@ void MenuAbonatiInterfata()
         switch (toupper(option = _getch()))
         {
         case '1':
+            system("cls");
             Client::AfisareListaAbonati(listaClienti);
             break;
         case '2':

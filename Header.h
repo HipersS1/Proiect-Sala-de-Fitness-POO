@@ -18,7 +18,8 @@
 
 using namespace std;
 
-#define FORMAT1 "\t\t\t\t"
+#define FORMAT1 "\t\t\t\t\t\b\b\b\b"
+#define BACKSPACEFORMAT "\b\b\b\b"
 #define FORMAT2 "\t\t\t\t\t\t"
 #define FORMAT3 "\t\t\t\t\t"
 #define FORMAT4 "\t\t\t\t\t\t\t\b"
@@ -40,4 +41,4 @@ bool ValidareNumar(const string& str);
 
 
 const int zile30 = 2592000;
-const int numarMaximAngajati = 99;
+const int numarMaximAngajati = 98;

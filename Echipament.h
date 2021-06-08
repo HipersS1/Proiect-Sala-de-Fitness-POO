@@ -42,6 +42,7 @@ public:
 	static Echipament AdaugaEchipament();
 	static void ActualizareRevizie(list<Echipament> listaEchipamente);
 	static void StergeEchipament(list<Echipament>& listaEchipamente);
+	string ConversieNumeFaraBara(string nume);
 
 	static int RandomCod(list<Echipament> listaEchipamente);
 	bool operator == (const Echipament& a) const

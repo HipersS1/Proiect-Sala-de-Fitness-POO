@@ -1,7 +1,7 @@
 #include "Echipament.h"
 #include "AdministrareFisiere.h"
 const int NUME = 3;
-const int NUMEMAX = 15;
+const int NUMEMAX = 25;
 
 Echipament Echipament::AdaugaEchipament()
 {
@@ -26,6 +26,7 @@ Echipament Echipament::AdaugaEchipament()
 		}
 		
 	} while (true);
+	for (auto& c : nume) c = toupper(c);
 	Echipament echipament(nume);
 	bool tipAles = false;
 	do
@@ -80,7 +81,10 @@ Echipament Echipament::AdaugaEchipament()
 void Echipament::ActualizareRevizie(list<Echipament> listaEchipamente)
 {
 	if (listaEchipamente.empty())
+	{
+		cout << FORMAT4"\b\b\b\033[0;31mBaza de date este goala\033[0m" << endl;
 		return;
+	}
 	string codIntrodus;
 	bool necesitaRevizie = false;
 	FORMATROW;
@@ -93,7 +97,7 @@ void Echipament::ActualizareRevizie(list<Echipament> listaEchipamente)
 			if (header == false)
 			{
 				header = true;
-				cout << FORMAT1 "|" underline << setw(6) << left << "Cod" << setw(15) << left << "Nume" << setw(13) << left << "Categorie" << setw(17) << left << "Perioada Revizie" << setw(14) << left << "Stare Revizie" << "\033[0m|" << endl;
+				cout << FORMAT1 "|" underline << setw(6) << left << "Cod" << setw(NUMEMAX) << left << "Nume" << setw(13) << left << "Categorie" << setw(17) << left << "Perioada Revizie" << setw(14) << left << "Stare Revizie" << "\033[0m|" << endl;
 			}
 			necesitaRevizie = true;
 			cout << it->ConversieSir2() << endl;
@@ -101,7 +105,7 @@ void Echipament::ActualizareRevizie(list<Echipament> listaEchipamente)
 	}
 	if (necesitaRevizie == false)
 	{
-		cout << FORMAT3"\033[1;31mNu exista ehipamente ce necesita revizie\033[0m" << endl;
+		cout << FORMAT2"\b\b\b\b\033[1;31mNu exista ehipamente ce necesita revizie\033[0m" << endl;
 		return;
 	}
 
@@ -150,14 +154,18 @@ void Echipament::ActualizareRevizie(list<Echipament> listaEchipamente)
 void Echipament::StergeEchipament(list<Echipament>& listaEchipamente)
 {
 	if (listaEchipamente.empty())
+	{
+		cout << FORMAT4"\b\b\b\033[0;31mBaza de date este goala\033[0m" << endl;
 		return;
+	}
+
 	string codIntrodus;
 	AfisareListaEchipamente(listaEchipamente);
-	cout << "Introduceti codul: ";
+	cout << endl << FORMAT3"    Introduceti codul: ";
 	cin >> codIntrodus;
 	if (ValidareNumar(codIntrodus) == false)
 	{
-		cout << "Codul a fost introdus incorect." << endl;
+		cout << FORMAT3"    \033[1;31mCodul a fost introdus incorect\033[0m" << endl;
 		return;
 	}
 	int codSelectat = stoi(codIntrodus);
@@ -168,10 +176,11 @@ void Echipament::StergeEchipament(list<Echipament>& listaEchipamente)
 		{
 			listaEchipamente.remove(*it);
 			AdministrareFisiere::RescrieFisierEchipament(listaEchipamente);
+			cout << FORMAT3"    \033[0;32mEchipamentul cu codul " + to_string(codSelectat) + " a fost sters\033[0m" << endl;
 			return;
 		}
 	}
-	cout << "Echipamentul cu codul " + to_string(codSelectat) + " nu exista." << endl;
+	cout << FORMAT3"    \033[1;31mEchipamentul cu codul " + to_string(codSelectat) + " nu exista\033[0m" << endl;
 
 }
 
@@ -206,20 +215,20 @@ void Echipament::AfisareListaEchipamente(list<Echipament> listaEchipamente, int 
 {
 	if (listaEchipamente.empty())
 	{
-		cout << "- GOL - ";
+		cout << FORMAT4"\b\b\b\033[0;31mBaza de date este goala\033[0m" << endl;
 		return;
 	}
 	FORMATROW;
 	if (tip == 1)
 	{
-		cout << FORMAT1 "|" underline << setw(6) << left << "Cod" << setw(15) << left << "Nume" << setw(13) << left << "Categorie" << setw(17) << left << "Perioada revizie" << "\033[0m|" << endl;
+		cout << FORMAT1 "|" underline << setw(6) << left << "Cod" << setw(NUMEMAX) << left << "Nume" << setw(13) << left << "Categorie" << setw(17) << left << "Perioada Revizie" << "\033[0m|" << endl;
 		for (list<Echipament>::iterator it = listaEchipamente.begin(); it != listaEchipamente.end(); ++it)
 		{
 			cout << it->ConversieSir() << "\n";
 		}
 		return;
 	}
-	cout << FORMAT1 "|" underline << setw(6) << left << "Cod" << setw(15) << left << "Nume" << setw(13) << left << "Categorie" << setw(17) << left << "Perioada revizie" << setw(14) << left << "Stare Revizie" << "\033[0m|" << endl;
+	cout << FORMAT1 "|" underline << setw(6) << left << "Cod" << setw(NUMEMAX) << left << "Nume" << setw(13) << left << "Categorie" << setw(17) << left << "Perioada Revizie" << setw(14) << left << "Stare Revizie" << "\033[0m|" << endl;
 
 	for (list<Echipament>::iterator it = listaEchipamente.begin(); it != listaEchipamente.end(); ++it)
 	{
@@ -246,9 +255,9 @@ void Echipament::StatisticaEchipamente(list<Echipament> listaEchipmanete)
 	std::ostringstream table;
 	FORMATROW;
 
-	table << FORMAT1 underline "|" << setw(15) << left << "Nr. Echipamente " << setw(7) << left << "Cardio" << setw(11) << left << "Rezistenta" << setw(9) << left << "Greutati" << setw(17) << left << "Necesita revizie|";
-	table << "\n" << FORMAT1 underline"|" << setw(6) << left << " " << setw(12) << left << listaEchipmanete.size() << setw(9) << left << to_string(cardio) << setw(11) << left << to_string(rezistenta) << setw(13) << left << to_string(greutati)
-		<< setw(8) << left << to_string(revizie) << "|\033[0m";
+	table << FORMAT1  "|" underline << setw(15) << left << "Nr. Echipamente " << setw(7) << left << "Cardio" << setw(11) << left << "Rezistenta" << setw(9) << left << "Greutati" << setw(17) << left << "Necesita revizie\033[0m|";
+	table << "\n" << FORMAT1 "|" underline << setw(6) << left << " " << setw(12) << left << listaEchipmanete.size() << setw(9) << left << to_string(cardio) << setw(11) << left << to_string(rezistenta) << setw(13) << left << to_string(greutati)
+		<< setw(8) << left << to_string(revizie) << "\033[0m|";
 	string text = table.str();
 	cout << text;
 	FORMATROW;
@@ -258,7 +267,7 @@ void Echipament::StatisticaEchipamente(list<Echipament> listaEchipmanete)
 std::string Echipament::ConversieSir()
 {
 	std::ostringstream table;
-	table << FORMAT1 "|" underline << setw(6) << left << cod << setw(15) << left << nume << setw(13) << left << getCategorie() << setw(17) << left << perioadaRevizie << "\033[0m|";
+	table << FORMAT1 "|" underline << setw(6) << left << cod << setw(NUMEMAX) << left << ConversieNumeFaraBara(nume) << setw(13) << left << getCategorie() << setw(17) << left << perioadaRevizie << "\033[0m|";
 
 	return table.str();
 }
@@ -266,7 +275,7 @@ std::string Echipament::ConversieSir()
 std::string Echipament::ConversieSir2()
 {
 	std::ostringstream table;
-	table << FORMAT1 "|" underline << setw(6) << left << cod << setw(15) << left << nume << setw(13) << left << getCategorie() << setw(17) << left << perioadaRevizie;
+	table << FORMAT1 "|" underline << setw(6) << left << cod << setw(NUMEMAX) << left << ConversieNumeFaraBara(nume) << setw(13) << left << getCategorie() << setw(17) << left << perioadaRevizie;
 	time_t acum = time(0);
 
 	if (dataRevizie + zile30 * perioadaRevizie > acum)
@@ -281,4 +290,14 @@ std::string Echipament::ConversieSirFisier()
 {
 	//stringstream ss;
 	return to_string(cod) + " " + nume + " " + to_string(categorie) + " " + to_string(perioadaRevizie) + " " + to_string(dataRevizie);
+}
+
+string Echipament::ConversieNumeFaraBara(string nume)
+{
+	for (int i = 0; i < nume.length(); i++)
+	{
+		if (nume[i] == '_')
+			nume[i] = ' ';
+	}
+	return nume;
 }

@@ -4,17 +4,20 @@
 Client Client::AdaugaClient()
 {
 	string nume, prenume, input;
+
 	FORMATROW;
+	cout << FORMAT2 << setw(23) << right << "Introduceti informatiile clientului " << endl << endl;
+
 	do
 	{
-		cout << FORMAT3"Introduceti numele: ";
+		cout << FORMAT2 << setw(9) << right << "Nume: ";
 		cin >> nume;
 	} while (!ValidareString(nume));
 	cin.seekg(0, ios::end);//in caz ca sunt introduse 2 cuvinte
 	cin.clear();
 	do
 	{
-		cout << FORMAT3"Introduceti prenumele: ";
+		cout << FORMAT2 << setw(8) << right << "Prenume: ";
 		cin >> prenume;
 	} while (!ValidareString(prenume));
 	cin.seekg(0, ios::end);
@@ -24,9 +27,9 @@ Client Client::AdaugaClient()
 	Client clientNou(nume, prenume);
 
 	bool tipAles = false;
+	cout << endl << FORMAT2"Alegeti tipul abonamentului\n" << FORMAT2 "1 - Standard 2 - Premium\n";
 	do
 	{
-		cout << FORMAT3"Alegeti tipul abonamentului: 1 - Standard 2 -Premium\n";
 		switch (toupper(_getch()))
 		{
 		case '1':
@@ -47,15 +50,7 @@ Client Client::AdaugaClient()
 	time_t acum = time(0);
 	clientNou.abonamentActivat = acum;
 
-	cout << endl << FORMAT3"    \033[1;32mAbonatul a fost inregistrat cu succes.\033[0m";
-	/*tm* ltm = localtime(&acum);
-
-	cout << "Year:" << 1900 + ltm->tm_year << endl;
-	cout << "Month: " << 1 + ltm->tm_mon << endl;
-	cout << "Day: " << ltm->tm_mday << endl;
-	cout << "Time: " << ltm->tm_hour << ":";
-	cout << ltm->tm_min << ":";
-	cout << ltm->tm_sec << endl;*/
+	cout << endl << FORMAT3"    \033[1;32mAbonatul " << clientNou.nume << " " << clientNou.prenume  << " a fost inregistrat cu succes.\033[0m";
 
 	return clientNou;
 }
@@ -64,10 +59,10 @@ void Client::AfisareListaAbonati(list<Client> listaClienti)
 {
 	if (listaClienti.empty())
 	{
-		cout << "- GOL - ";
+		cout << FORMAT4"\b\b\b\033[0;31mBaza de date este goala\033[0m" << endl;
 		return;
 	}
-	FORMATROW;
+	//FORMATROW;
 	cout << FORMAT1"|" underline << setw(5) << left << "COD" << setw(15) << left << "NUME" << setw(15) << left << "PRENUME" << setw(11) << left << "ABONAMENT" << setw(10) << left << "VALIDITATE" << "\033[0m|" <<  endl;
 	for (list<Client>::iterator it = listaClienti.begin(); it != listaClienti.end(); ++it)
 	{
@@ -134,9 +129,9 @@ void Client::StatisticaAbonamente(list<Client> listaClienti)
 	std::ostringstream table;
 	FORMATROW;
 
-	table << FORMAT1 underline"|" << setw(15) << left << "Nr. Abonamente " << setw(9) << left << "Standard" << setw(8) << left << "Premium" << setw(9) << left << "Activate" << setw(11) << left << "Dezactivate|"; 
-	table << "\n" << FORMAT1 underline"|" << setw(6) << left << " " << setw(12) << left << listaClienti.size() << setw(9) << left << abonamentStandard << setw(8) << left << abonamentPremium << setw(9) << left << abonamenteActivate
-		  << setw(8) << left << to_string(listaClienti.size() - abonamenteActivate) << "|\033[0m";
+	table << FORMAT3 "\b\b\b|" underline << setw(15) << left << "Nr. Abonamente " << setw(9) << left << "Standard" << setw(8) << left << "Premium" << setw(9) << left << "Activate" << setw(11) << left << "Dezactivate\033[0m|";
+	table << "\n" << FORMAT3"\b\b\b|" underline << setw(6) << left << " " << setw(12) << left << listaClienti.size() << setw(9) << left << abonamentStandard << setw(8) << left << abonamentPremium << setw(9) << left << abonamenteActivate
+		  << setw(8) << left << to_string(listaClienti.size() - abonamenteActivate) << "\033[0m|";
 	string text = table.str();
 	cout << text;
 	FORMATROW;
@@ -169,7 +164,10 @@ void Client::StatisticaAbonamente(list<Client> listaClienti)
 void Client::ActivareAbonament(list<Client>& listaClienti)
 {
 	if (listaClienti.empty())
+	{
+		cout << FORMAT4"\b\b\b\033[0;31mBaza de date este goala\033[0m" << endl;
 		return;
+	}
 	string codIntrodus;
 	bool abonamenteDezactivate = false;
 	FORMATROW;
@@ -242,14 +240,14 @@ int Client::RandomCod(list<Client> listaPersoane)
 	srand(time(0));
 	if (listaPersoane.empty())
 	{
-		randCod = rand() % 1000 + 100;
+		randCod = rand() % 999 + 100;
 		return randCod;
 	}
 	bool codNouGasit = false;
 	do
 	{
 		codNouGasit = true;
-		randCod = rand() % 1000 + 100;
+		randCod = rand() % 999 + 100;
 		for (list<Client>::iterator it = listaPersoane.begin(); it != listaPersoane.end(); it++)
 		{
 			if (randCod == it->cod)
