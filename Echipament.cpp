@@ -31,7 +31,7 @@ Echipament Echipament::AdaugaEchipament()
 	bool tipAles = false;
 	do
 	{
-		cout << FORMAT3"Alegeti tipul abonamentului\n";
+		cout << FORMAT3"Alegeti tipul echipamentului\n";
 		cout << FORMAT3"1 - Cardio 2 - Rezistenta 3 - Greutati\n";
 		switch (toupper(_getch()))
 		{
